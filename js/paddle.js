@@ -52,7 +52,7 @@ export async function initPaddle(debug){
 }
 
 export async function detectText(canvas,debug){
-    
+
     debug(
         "Paddle Canvas",
         `${canvas.width} x ${canvas.height}`
@@ -106,11 +106,16 @@ export async function detectText(canvas,debug){
 
             items.forEach((item,index)=>{
 
-                debug(
+                const date = findDate(items,debug);
+                if(date){
+                    debug("Result",date);
+                }
+                else{
+                    debug(
                     "Paddle "+index,
-                    `${item.text} (${item.score.toFixed(2)})`
-                );
-
+                    `${item.text} (${item.score.toFixed(2)})`);
+                }
+                
             });
 
         }
@@ -129,4 +134,44 @@ export async function detectText(canvas,debug){
         return null;
     }
 
+}
+
+export function findDate(items,debug){
+
+    const dateRegex=[
+        /\b\d{1,2}[./-]\d{1,2}[./-]\d{2,4}\b/,
+        /\b\d{4}[./-]\d{1,2}[./-]\d{1,2}\b/,
+        /\b\d{1,2}[./-]\d{1,2}\d{4}\b/
+    ];
+
+    for(const item of items){
+
+        const text=item.text;
+
+
+        for(const regex of dateRegex){
+
+            const match=text.match(regex);
+
+
+            if(match){
+
+                debug(
+                    "Date Candidate",
+                    match[0]
+                );
+
+                return match[0];
+
+            }
+
+        }
+
+    }
+    debug(
+        "Date Candidate",
+        "Not Found"
+    );
+
+    return null;
 }
