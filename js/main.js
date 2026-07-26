@@ -4,7 +4,9 @@ import { setStatus } from "./ui.js";
 
 const startBtn = document.getElementById("startBtn");
 const captureBtn = document.getElementById("captureBtn");
+
 const roiElement = document.getElementById("roi");
+const snapshot = document.getElementById("snapshot");
 
 startBtn.onclick = async () => {
     try {
@@ -19,17 +21,13 @@ startBtn.onclick = async () => {
 captureBtn.onclick = () => {
     const video = getVideo();
 
-    const roiImage = cropROI(
+    cropROI(
         video,
-        roiElement
+        roiElement,
+        snapshot
     );
 
-    console.log(
-        "ROI Image:",
-        roiImage
-    );
+    snapshot.style.display = "block";
 
     setStatus("ROI裁切完成");
-
-    roiImage.style.display = "block";
 };

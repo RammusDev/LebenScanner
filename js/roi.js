@@ -1,5 +1,4 @@
-export function cropROI(video, roiElement) {
-    const canvas = document.createElement("canvas");
+export function cropROI(video, roiElement, canvas) {
     const ctx = canvas.getContext("2d");
 
     const videoWidth = video.videoWidth;
@@ -19,6 +18,13 @@ export function cropROI(video, roiElement) {
 
     canvas.width = width;
     canvas.height = height;
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
     ctx.drawImage(
         video,
