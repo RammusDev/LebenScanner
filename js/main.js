@@ -3,13 +3,14 @@ import {cropROI} from "./roi.js";
 import {setStatus} from "./ui.js";
 import {debug,initDebug} from "./debug.js";
 import {startBarcodeScanner} from "./barcode.js";
+import {DOM} from "./dom.js";
 
 initDebug();
 
-const startBtn=document.getElementById("startBtn");
-const captureBtn=document.getElementById("captureBtn");
-const roiElement=document.getElementById("roi");
-const snapshot=document.getElementById("snapshot");
+const startBtn=DOM.startBtn;
+const captureBtn=DOM.captureBtn;
+const roiElement=DOM.roi;
+const snapshot=DOM.snapshot;
 
 debug(
     "Elements",
