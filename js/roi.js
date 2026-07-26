@@ -1,5 +1,3 @@
-import {setWorkingCanvas} from "./canvas.js";
-
 export function cropROI(video,roiElement,canvas,debug){
 
     const ctx=canvas.getContext("2d");
@@ -21,13 +19,8 @@ export function cropROI(video,roiElement,canvas,debug){
         `${Math.round(x)},${Math.round(y)} ${Math.round(width)} x ${Math.round(height)}`
     );
 
-    const outputWidth=800;
-    const outputHeight=Math.round(
-        height/width*outputWidth
-    );
-
-    canvas.width=outputWidth;
-    canvas.height=outputHeight;
+    canvas.width=width;
+    canvas.height=height;
 
     ctx.clearRect(
         0,
@@ -47,8 +40,6 @@ export function cropROI(video,roiElement,canvas,debug){
         width,
         height
     );
-    
-    setWorkingCanvas(canvas);
 
     debug(
         "Canvas",
