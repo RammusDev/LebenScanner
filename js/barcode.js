@@ -1,42 +1,38 @@
-let codeReader = null;
+let codeReader=null;
+let scanning=false;
 
-export function startBarcodeScanner(video, debug) {
-
-    if (!window.ZXing) {
-        debug(
-            "Barcode",
-            "ZXing not loaded"
-        );
+export function startBarcodeScanner(video,debug){
+    if(!window.ZXing){
+        debug("Barcode","ZXing not loaded");
         return;
     }
 
-    codeReader = new ZXing.BrowserMultiFormatReader();
+    if(scanning)return;
 
-    debug(
-        "Barcode",
-        "Scanner Ready"
-    );
+    scanning=true;
+    codeReader=new ZXing.BrowserMultiFormatReader();
 
-    codeReader.decodeFromVideoDevice(
-        null,
-        video,
-        (result, error) => {
-            if (result) {
+    debug("Barcode","Scanner Ready");
 
-                debug(
-                    "Barcode",
-                    result.getText()
-                );
-                stopBarcodeScanner();
-            }
+    codeReader.decodeFromVideoElement(video)
+    .then(result=>{
+        debug("Barcode",result.getText());
+        stopBarcodeScanner();
+    })
+    .catch(error=>{
+        if(scanning){
+            requestAnimationFrame(()=>{
+                startBarcodeScanner(video,debug);
+            });
         }
-    );
+    });
 }
 
 export function stopBarcodeScanner(){
+    scanning=false;
 
     if(codeReader){
         codeReader.reset();
+        codeReader=null;
     }
-
 }
