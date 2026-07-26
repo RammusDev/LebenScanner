@@ -93,7 +93,6 @@ function drawBoxes(canvas,items){
 
 }
 
-
 export async function detectText(canvas,debug){
 
     if(!ocr){
@@ -131,20 +130,40 @@ export async function detectText(canvas,debug){
         result[0].items
     ){
 
-        drawBoxes(
-            canvas,
-            result[0].items
-        );
+        const items=result[0].items;
 
 
         debug(
             "Paddle Boxes",
-            result[0].items.length
+            items.length
+        );
+
+
+        items.forEach((item,index)=>{
+
+            debug(
+                "Paddle "+index,
+                `${item.text} (${item.score.toFixed(2)})`
+            );
+
+
+            if(item.poly){
+
+                debug(
+                    "Box "+index,
+                    JSON.stringify(item.poly)
+                );
+
+            }
+
+        });
+
+
+        drawBoxes(
+            canvas,
+            items
         );
 
     }
-
-
     return result;
-
 }
