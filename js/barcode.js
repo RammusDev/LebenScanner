@@ -1,23 +1,23 @@
 export async function decodeBarcode(canvas,debug){
 
-    if(!window.ZXing){
+    if(!window.ZXingBrowser){
         debug(
             "Barcode",
-            "ZXing not loaded"
+            "ZXingBrowser not loaded"
         );
         return null;
     }
 
     try{
 
-        const codeReader=new ZXing.BrowserMultiFormatReader();
+        const reader=new ZXingBrowser.BrowserMultiFormatReader();
 
         debug(
             "Barcode",
             "Decode start"
         );
 
-        const result=await codeReader.decodeFromImage(canvas);
+        const result=await reader.decodeFromCanvas(canvas);
 
         const text=result.getText();
 
@@ -32,7 +32,7 @@ export async function decodeBarcode(canvas,debug){
 
         debug(
             "Barcode",
-            "No result"
+            error.message
         );
 
         return null;
