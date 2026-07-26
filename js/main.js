@@ -29,7 +29,6 @@ DOM.startBtn.onclick=async()=>{
     try{
 
         await startCamera();
-
         setStatus("相機已開啟","success");
 
         DOM.startBtn.style.display="none";
@@ -38,12 +37,10 @@ DOM.startBtn.onclick=async()=>{
         const video=getVideo();
 
         debug("Camera","Started");
-
         debug("Video",`${video.videoWidth} x ${video.videoHeight}`);
 
     }
     catch(error){
-
         debug("Camera Error",error.message);
         setStatus("相機開啟失敗","danger");
     }
@@ -53,7 +50,6 @@ DOM.startBtn.onclick=async()=>{
 DOM.captureBtn.onclick=async()=>{
 
     if(paddleBusy){
-
         debug("Paddle Busy","Skip");
         return;
     }
@@ -74,14 +70,9 @@ DOM.captureBtn.onclick=async()=>{
 
         setStatus("ROI裁切完成","info");
 
-        const result =
-            await detectText(
-                DOM.snapshot,
-                debug
-            );
+        const result = await detectText(DOM.snapshot,debug);
 
         if(result){
-
             fillMHD(result);
             showToast("MHD: "+result,"success");
             focusArtikel();
@@ -90,11 +81,7 @@ DOM.captureBtn.onclick=async()=>{
             showToast("MHD Not Found","error");
         }
 
-        currentBarcode =
-            await decodeBarcode(
-                DOM.snapshot,
-                debug
-            );
+        currentBarcode = await decodeBarcode(DOM.snapshot,debug);
 
         if(currentBarcode){
             fillBarcode(currentBarcode);
