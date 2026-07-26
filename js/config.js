@@ -1,4 +1,4 @@
 window.APP_CONFIG={
     name:"LebenScanner",
-    version:"V0.6.5"
+    version:"V0.7.2"
 };
