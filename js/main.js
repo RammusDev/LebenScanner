@@ -35,11 +35,11 @@ startBtn.onclick=async()=>{
 };
 
 captureBtn.onclick=()=>{
-    alert("1");
+  //  alert("1");
     const video=getVideo();
-    alert("2");
+  //  alert("2");
     debug("Capture","Clicked");
-    alert("3");
+  //  alert("3");
     debug(
         "Video",
         `${video.videoWidth} x ${video.videoHeight}`
