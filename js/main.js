@@ -95,7 +95,7 @@ DOM.captureBtn.onclick=async()=>{
             }
             else
             {
-                showToast("Barcode: ","Fail");
+                showToast("Barcode: Not Found","error");
             }
         }
     }
