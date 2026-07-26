@@ -1,6 +1,7 @@
 import { startCamera, getVideo } from "./camera.js";
 import { cropROI } from "./roi.js";
 import { setStatus } from "./ui.js";
+import { debug } from "./debug.js";
 
 const startBtn = document.getElementById("startBtn");
 const captureBtn = document.getElementById("captureBtn");
@@ -11,31 +12,43 @@ const snapshot = document.getElementById("snapshot");
 startBtn.onclick = async () => {
     try {
         await startCamera();
+
         setStatus("相機已開啟");
-        console.log("Camera started");
+        debug("Camera started");
+
+        const video = getVideo();
+
+        debug(
+            "Video: " +
+            video.videoWidth +
+            " x " +
+            video.videoHeight
+        );
+
     } catch (error) {
-        console.error(error);
-        setStatus("相機開啟失敗");
+        debug("Camera error");
+        debug(error.message);
     }
 };
 
 captureBtn.onclick = () => {
-    console.log("Capture button clicked");
+
+    debug("Capture clicked");
 
     const video = getVideo();
 
-    console.log("Video size:", video.videoWidth, video.videoHeight);
+    debug(
+        "Video size: " +
+        video.videoWidth +
+        " x " +
+        video.videoHeight
+    );
 
     cropROI(
         video,
         roiElement,
-        snapshot
-    );
-
-    console.log(
-        "Canvas size:",
-        snapshot.width,
-        snapshot.height
+        snapshot,
+        debug
     );
 
     snapshot.style.display = "block";

@@ -1,46 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>MHD Scanner</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-    <h2>
-        MHD Scanner
-    </h2>
+<h1>MHD Scanner</h1>
+<div>Version V0.4 Debug</div>
 
-    <p>
-        Version V0.3
-    </p>
+<div id="camera-container">
+    <video id="camera" autoplay playsinline></video>
+    <div id="roi">將日期放入框內</div>
+</div>
 
-
-    <div id="camera-container">
-
-        <video id="camera" autoplay playsinline>
-        </video>
-
-        <div id="roi">
-            MHD
-        </div>
-    </div>
-    <br>
+<div>
     <button id="startBtn">開啟相機</button>
     <button id="captureBtn">掃描</button>
-    <p id="status">等待開始</p>
+</div>
 
-    <canvas id="snapshot"></canvas>
+<p id="status">等待開始</p>
 
-    <script type="module" src="js/main.js"></script>
+<canvas id="snapshot"></canvas>
+
+<div id="debug">
+    Debug:
+</div>
+
+<script type="module" src="./js/main.js"></script>
 
 </body>
 
