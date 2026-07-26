@@ -8,6 +8,7 @@ import {decodeMHD} from "./ocr.js";
 import {initPaddle} from "./paddle.js";
 import { detectText } from "./paddle.js";
 let currentBarcode = null;
+let paddleBusy=false;
 
 initDebug();
 initPaddle(debug);
@@ -60,7 +61,19 @@ captureBtn.onclick=async()=>{
     setStatus("ROI裁切完成");
     debug("ROI","Captured");
 
-    detectText(snapshot,debug);
+    if(paddleBusy){
+        return;
+    }
+
+    paddleBusy=true;
+
+    const result=await detectText(
+        snapshot,
+        debug
+    );
+
+    paddleBusy=false;
+
  //alert("6");
     currentBarcode = await(decodeBarcode(snapshot,debug));
  //alert("7");
