@@ -12,7 +12,7 @@ import {
 } from "./ui.js";
 
 import {debug,initDebug} from "./debug.js";
-import {decodeBarcode} from "./barcode.js";
+import {decodeBarcode,validateBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
 import {initPaddle, detectText} from "./paddle.js";
 
@@ -70,23 +70,34 @@ DOM.captureBtn.onclick=async()=>{
 
         setStatus("ROI裁切完成","info");
 
-        const result = await detectText(DOM.snapshot,debug);
-
-        if(result){
-            fillMHD(result);
-            showToast("MHD: "+result,"success");
-            focusArtikel();
+        const hasBarcode = DOM.barcodeInput.value.trim() !== "";
+        const hasArtikel = DOM.artikelInput.value.trim() !== "";
+        if(hasBarcode || hasArtikel){
+            debug("Scan Mode","MHD Only");
+            const result = await detectText(DOM.snapshot,debug);
+            if(result){
+                fillMHD(result);
+                showToast("MHD: "+result,"success");
+                //focusArtikel();
+            }
+            else{
+                showToast("MHD Not Found","error");
+            }
         }
         else{
-            showToast("MHD Not Found","error");
+            debug("Scan Mode","Barcode First");
+            currentBarcode = await decodeBarcode(DOM.snapshot,debug);
+
+            if(validateBarcode(currentBarcode)){
+
+                fillBarcode(currentBarcode);
+                showToast("Barcode: "+currentBarcode,"success");
+            }
+            else
+            {
+                showToast("Barcode: ","Fail");
+            }
         }
-
-        currentBarcode = await decodeBarcode(DOM.snapshot,debug);
-
-        if(currentBarcode){
-            fillBarcode(currentBarcode);
-        }
-
     }
     finally{
         paddleBusy=false;
