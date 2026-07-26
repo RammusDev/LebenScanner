@@ -8,14 +8,13 @@ initDebug();
 
 const startBtn=document.getElementById("startBtn");
 const captureBtn=document.getElementById("captureBtn");
+const roiElement=document.getElementById("roi");
+const snapshot=document.getElementById("snapshot");
 
 debug(
     "Elements",
     `start:${!!startBtn} capture:${!!captureBtn} roi:${!!roiElement} canvas:${!!snapshot}`
 );
-
-const roiElement=document.getElementById("roi");
-const snapshot=document.getElementById("snapshot");
 
 startBtn.onclick=async()=>{
     try{
