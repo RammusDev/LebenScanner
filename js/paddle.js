@@ -16,7 +16,7 @@ export async function initPaddle(debug){
             lang:"en",
             ocrVersion:"PP-OCRv5",
             ortOptions:{
-                backend:"auto"
+                backend:"wasm"
             }
         });
 
@@ -26,6 +26,16 @@ export async function initPaddle(debug){
         debug("Paddle Error",error.message);
     }
 
+}
+export function downscaleCanvas(sourceCanvas, maxSize = 960) {
+    const scale = Math.min(maxSize / sourceCanvas.width, maxSize / sourceCanvas.height, 1);
+    if (scale === 1) return sourceCanvas;
+    
+    const small = document.createElement("canvas");
+    small.width = sourceCanvas.width * scale;
+    small.height = sourceCanvas.height * scale;
+    small.getContext("2d").drawImage(sourceCanvas, 0, 0, small.width, small.height);
+    return small;
 }
 
 export async function detectText(canvas,debug){
@@ -38,7 +48,7 @@ export async function detectText(canvas,debug){
     debug("Paddle","Predict Start");
 
     try{
-        const result = await ocr.predict(canvas);
+        const result = await ocr.predict(downscaleCanvas(canvas));
 
         debug("Paddle","Predict Done");
 

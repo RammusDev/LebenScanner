@@ -4,7 +4,7 @@ import {setStatus} from "./ui.js";
 import {debug,initDebug} from "./debug.js";
 import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
-import {decodeMHD} from "./ocr.js";
+//import {decodeMHD} from "./ocr.js";
 import {initPaddle} from "./paddle.js";
 import { detectText } from "./paddle.js";
 let currentBarcode = null;
@@ -64,19 +64,15 @@ captureBtn.onclick=async()=>{
     if(paddleBusy){
         return;
     }
-
+    debug("Paddle Busy","True");
     paddleBusy=true;
 
     const result=await detectText(
         snapshot,
         debug
     );
-
     paddleBusy=false;
-
- //alert("6");
+    debug("Paddle Busy","False");
+    
     currentBarcode = await(decodeBarcode(snapshot,debug));
- //alert("7");
-    //await decodeMHD(snapshot,debug);
-
 };
