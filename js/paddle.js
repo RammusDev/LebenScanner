@@ -30,7 +30,7 @@ export async function initPaddle(debug){
             lang:"en",
             ocrVersion:"PP-OCRv5",
             ortOptions:{
-                backend:"auto"
+                backend:"wasm"
             }
         });
 
@@ -73,10 +73,7 @@ export async function detectText(canvas,debug){
 
     const result =await ocr.predict(canvas);
 
-    drawBoxes(
-        canvas,
-        result[0].items
-    );
+    //drawBoxes(canvas,result[0].items);
 
     debug(
         "Paddle",
