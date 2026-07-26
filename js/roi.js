@@ -36,11 +36,6 @@ export function cropROI(video,roiElement,canvas,debug){
         canvas.height
     );
 
-    debug(
-        "BeforeDraw",
-        `${width} x ${height}`
-    );
-
     ctx.drawImage(
         video,
         x,
@@ -52,12 +47,7 @@ export function cropROI(video,roiElement,canvas,debug){
         width,
         height
     );
-
-    debug(
-        "AfterDraw",
-        "done"
-    );
-
+    
     setWorkingCanvas(canvas);
 
     debug(

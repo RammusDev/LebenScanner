@@ -1,28 +1,34 @@
-let stream = null;
+let stream=null;
 
-const video = document.getElementById("camera");
+const video=document.getElementById("camera");
 
-export async function startCamera() {
-    stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-            facingMode: {
-                ideal: "environment"
+export async function startCamera(){
+
+    stream=await navigator.mediaDevices.getUserMedia({
+        video:{
+            facingMode:{
+                ideal:"environment"
             }
         },
-        audio: false
+        audio:false
     });
 
-    video.srcObject = stream;
+    video.srcObject=stream;
+
+    await video.play();
 }
 
-export function getVideo() {
+export function getVideo(){
     return video;
 }
 
-export function stopCamera() {
-    if (stream) {
-        stream.getTracks().forEach(track => {
+export function stopCamera(){
+
+    if(stream){
+        stream.getTracks().forEach(track=>{
             track.stop();
         });
+
+        stream=null;
     }
 }
