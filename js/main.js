@@ -5,11 +5,12 @@ import {debug,initDebug} from "./debug.js";
 import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
 import {decodeMHD} from "./ocr.js";
+import {initPaddle} from "./paddle.js";
 
 let currentBarcode = null;
 
 initDebug();
-
+initPaddle(debug);
 const startBtn=DOM.startBtn;
 const captureBtn=DOM.captureBtn;
 const roiElement=DOM.roi;
