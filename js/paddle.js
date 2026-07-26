@@ -51,48 +51,6 @@ export async function initPaddle(debug){
 
 }
 
-
-function drawBoxes(canvas,items){
-
-    const ctx=
-        canvas.getContext("2d");
-
-
-    ctx.lineWidth=2;
-    ctx.strokeStyle="red";
-
-
-    items.forEach(item=>{
-
-        const p=item.poly;
-
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            p[0][0],
-            p[0][1]
-        );
-
-
-        for(let i=1;i<p.length;i++){
-
-            ctx.lineTo(
-                p[i][0],
-                p[i][1]
-            );
-
-        }
-
-
-        ctx.closePath();
-
-        ctx.stroke();
-
-    });
-
-}
-
 export async function detectText(canvas,debug){
 
     if(!ocr){
@@ -112,58 +70,58 @@ export async function detectText(canvas,debug){
     );
 
 
-    const result=
-        await ocr.predict(
-            canvas
-        );
+    try{
 
-
-    debug(
-        "Paddle",
-        "Predict Done"
-    );
-
-
-    if(
-        result &&
-        result[0] &&
-        result[0].items
-    ){
-
-        const items=result[0].items;
-
-
-        debug(
-            "Paddle Boxes",
-            items.length
-        );
-
-
-        items.forEach((item,index)=>{
-
-            debug(
-                "Paddle "+index,
-                `${item.text} (${item.score.toFixed(2)})`
+        const result=
+            await ocr.predict(
+                canvas
             );
 
 
-            if(item.poly){
-
-                debug(
-                    "Box "+index,
-                    JSON.stringify(item.poly)
-                );
-
-            }
-
-        });
-
-
-        drawBoxes(
-            canvas,
-            items
+        debug(
+            "Paddle",
+            "Predict Done"
         );
 
+
+        if(
+            result &&
+            result[0] &&
+            result[0].items
+        ){
+
+            const items=result[0].items;
+
+
+            debug(
+                "Paddle Boxes",
+                items.length
+            );
+
+
+            items.forEach((item,index)=>{
+
+                debug(
+                    "Paddle "+index,
+                    `${item.text} (${item.score.toFixed(2)})`
+                );
+
+            });
+
+        }
+
+
+        return result;
+
+
+    }catch(error){
+
+        debug(
+            "Paddle Error",
+            error.message
+        );
+
+        return null;
     }
-    return result;
+
 }
