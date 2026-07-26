@@ -2,6 +2,10 @@ import { startCamera, getVideo } from "./camera.js";
 import { cropROI } from "./roi.js";
 import { setStatus } from "./ui.js";
 import { debug } from "./debug.js";
+import {
+    startBarcodeScanner,
+    stopBarcodeScanner
+} from "./barcode.js";
 
 const startBtn = document.getElementById("startBtn");
 const captureBtn = document.getElementById("captureBtn");
@@ -42,22 +46,12 @@ captureBtn.onclick = () => {
 
     debug(
         "Capture",
-        "Clicked"
+        "Barcode Mode"
     );
 
-    debug(
-        "Video",
-        `${video.videoWidth} x ${video.videoHeight}`
-    );
-
-    cropROI(
+    startBarcodeScanner(
         video,
-        roiElement,
-        snapshot,
         debug
     );
 
-    snapshot.style.display = "block";
-
-    setStatus("ROI裁切完成");
 };
