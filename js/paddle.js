@@ -61,14 +61,16 @@ export async function detectText(canvas,debug){
                 const date = findDate(items,debug);
                 if(date){
                     debug("Result",date);
-                    alert("Find MHD:"+ date );
+                    return date;
+                    //alert("Find MHD:"+ date );
                 }
                 else{
                     debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
                 }
             });
         }
-        return result;
+        // No found is fail
+        return null;
     }catch(error){
         debug("Paddle Error",error.message);
         return null;

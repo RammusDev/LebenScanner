@@ -1,6 +1,6 @@
 import {startCamera,getVideo} from "./camera.js";
 import {cropROI} from "./roi.js";
-import {setStatus} from "./ui.js";
+import {setStatus,showToast} from "./ui.js";
 import {debug,initDebug} from "./debug.js";
 import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
@@ -37,41 +37,37 @@ startBtn.onclick=async()=>{
         setStatus("相機開啟失敗");
     }
 };
-
 captureBtn.onclick=async()=>{
-  //  alert("1");
-    const video=getVideo();
-  //  alert("2");
-    debug("Capture","Clicked");
-  //  alert("3");
-    debug(
-        "Video",
-        `${video.videoWidth} x ${video.videoHeight}`
-    );
-    //alert("4");
-    cropROI(
-        video,
-        roiElement,
-        snapshot,
-        debug
-    );
- //alert("5");
-    snapshot.style.display="block";
-    setStatus("ROI裁切完成");
-    debug("ROI","Captured");
 
     if(paddleBusy){
+        debug("Paddle Busy","Skip");
         return;
     }
-    debug("Paddle Busy","True");
+
     paddleBusy=true;
 
-    const result=await detectText(
-        snapshot,
-        debug
-    );
-    paddleBusy=false;
-    debug("Paddle Busy","False");
+    try{
+        const video=getVideo();
+        cropROI(
+            video,
+            roiElement,
+            snapshot,
+            debug
+        );
 
-    currentBarcode = await(decodeBarcode(snapshot,debug));
+        snapshot.style.display="block";
+        setStatus("ROI裁切完成");
+        const result=await detectText(snapshot,debug);
+        if(result){
+            showToast("MHD: "+result);
+        }
+        else{
+            showToast("MHD Not Found");
+        }
+        currentBarcode =await decodeBarcode(snapshot,debug);
+    }
+    finally{
+        paddleBusy=false;
+        debug("Paddle Busy","False");
+    }
 };
