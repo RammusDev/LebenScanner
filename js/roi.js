@@ -21,8 +21,13 @@ export function cropROI(video,roiElement,canvas,debug){
         `${Math.round(x)},${Math.round(y)} ${Math.round(width)} x ${Math.round(height)}`
     );
 
-    canvas.width=width;
-    canvas.height=height;
+    const outputWidth=800;
+    const outputHeight=Math.round(
+        height/width*outputWidth
+    );
+
+    canvas.width=outputWidth;
+    canvas.height=outputHeight;
 
     ctx.clearRect(
         0,
@@ -39,8 +44,8 @@ export function cropROI(video,roiElement,canvas,debug){
         height,
         0,
         0,
-        width,
-        height
+        outputWidth,
+        outputHeight
     );
 
     setWorkingCanvas(canvas);

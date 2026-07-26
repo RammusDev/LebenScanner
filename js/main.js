@@ -44,22 +44,22 @@ captureBtn.onclick=()=>{
         "Video",
         `${video.videoWidth} x ${video.videoHeight}`
     );
-    alert("4");
+    //alert("4");
     cropROI(
         video,
         roiElement,
         snapshot,
         debug
     );
- alert("5");
+ //alert("5");
     snapshot.style.display="block";
 
     debug("ROI","Captured");
- alert("6");
-    startBarcodeScanner(
-        video,
-        debug
-    );
- alert("7");
+ //alert("6");
+    // startBarcodeScanner(
+    //     video,
+    //     debug
+    // );
+ //alert("7");
     setStatus("ROI裁切完成");
 };
