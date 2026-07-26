@@ -64,6 +64,6 @@ captureBtn.onclick=async()=>{
  //alert("6");
     currentBarcode = await(decodeBarcode(snapshot,debug));
  //alert("7");
-    await decodeMHD(snapshot,debug);
+    //await decodeMHD(snapshot,debug);
 
 };

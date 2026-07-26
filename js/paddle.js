@@ -52,6 +52,11 @@ export async function initPaddle(debug){
 }
 
 export async function detectText(canvas,debug){
+    
+    debug(
+        "Paddle Canvas",
+        `${canvas.width} x ${canvas.height}`
+    );
 
     if(!ocr){
 
