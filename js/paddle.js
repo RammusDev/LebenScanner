@@ -57,7 +57,9 @@ export async function detectText(canvas,debug){
         {
             const items=result[0].items;
             debug("Paddle Boxes",items.length);
-
+            items.forEach((item,index)=>{
+                debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
+            });
             
             const date = findDate(items,debug);
             if(date){
@@ -65,9 +67,6 @@ export async function detectText(canvas,debug){
                 return date;
                 //alert("Find MHD:"+ date );
             }
-            items.forEach((item,index)=>{
-                debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
-            });
         }
         // No found is fail
         return null;
