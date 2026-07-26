@@ -71,11 +71,12 @@ export async function detectText(canvas,debug){
     );
 
 
-    const result =
-        await ocr.predict(
-            canvas
-        );
+    const result =await ocr.predict(canvas);
 
+    drawBoxes(
+        canvas,
+        result[0].items
+    );
 
     debug(
         "Paddle",
@@ -90,4 +91,36 @@ export async function detectText(canvas,debug){
 
 
     return result;
+}
+function drawBoxes(canvas,items){
+
+    const ctx=canvas.getContext("2d");
+
+    ctx.lineWidth=2;
+    ctx.strokeStyle="red";
+
+    items.forEach(item=>{
+
+        const p=item.poly;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            p[0][0],
+            p[0][1]
+        );
+
+        for(let i=1;i<p.length;i++){
+
+            ctx.lineTo(
+                p[i][0],
+                p[i][1]
+            );
+
+        }
+
+        ctx.closePath();
+        ctx.stroke();
+
+    });
 }
