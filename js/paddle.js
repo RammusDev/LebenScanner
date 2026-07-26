@@ -73,11 +73,7 @@ export function findDate(items,debug){
     ];
     for(const item of items){
         const text=item.text;
-        let value=text
-        .replace(/O/g,"0")
-        .replace(/I/g,"1")
-        .replace(/l/g,"1")
-        .replace(/[^\d]/g,"");
+        let value=text.replace(/[^\d]/g,"");
 
         if(!/^\d{8}$/.test(value)){
             continue;
