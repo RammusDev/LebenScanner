@@ -6,5 +6,7 @@ export const DOM={
     snapshot:document.getElementById("snapshot"),
     status:document.getElementById("status"),
     debug:document.getElementById("debug"),
-    appVersion:document.getElementById("app-version")
+    appVersion:document.getElementById("app-version"),
+    submitBtn:document.getElementById("submitBtn"),
+    clearBtn:document.getElementById("clearBtn")
 };

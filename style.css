@@ -72,3 +72,45 @@ button {
     z-index:9999;
     display:none;
 }
+#data-buttons{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:15px;
+
+}
+
+
+#data-buttons button{
+
+    flex:1;
+
+    height:45px;
+
+    font-size:18px;
+
+    border-radius:8px;
+
+    border:none;
+
+}
+
+
+#submitBtn{
+
+    background:#1976d2;
+
+    color:white;
+
+}
+
+
+#clearBtn{
+
+    background:#777;
+
+    color:white;
+
+}

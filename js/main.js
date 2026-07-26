@@ -15,17 +15,20 @@ const startBtn=DOM.startBtn;
 const captureBtn=DOM.captureBtn;
 const roiElement=DOM.roi;
 const snapshot=DOM.snapshot;
+const submitBtn=DOM.submitBtn;
+const clearBtn=DOM.clearBtn;
 
 debug(
     "Elements",
     `start:${!!startBtn} capture:${!!captureBtn} roi:${!!roiElement} canvas:${!!snapshot}`
 );
-
 startBtn.onclick=async()=>{
     try{
         await startCamera();
 
         setStatus("相機已開啟");
+        startBtn.style.display="none";
+        captureBtn.style.display="inline-block";
 
         const video=getVideo();
 
@@ -70,4 +73,11 @@ captureBtn.onclick=async()=>{
         paddleBusy=false;
         debug("Paddle Busy","False");
     }
+};
+submitBtn.onclick=()=>{
+    debug("Submit","Clicked");
+};
+
+clearBtn.onclick=()=>{
+    debug("Clear","Clicked");
 };

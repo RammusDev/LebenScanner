@@ -20,13 +20,40 @@
 
 <div>
     <button id="startBtn">開啟相機</button>
-    <button id="captureBtn">掃描</button>
+    <button id="captureBtn" style="display:none;">掃描</button>
+</div>
+
+<div id="data-panel">
+    <h2>資料</h2>
+    <div id="input-grid">
+        <div class="input-box">
+            <label>Barcode</label>
+            <input id="barcodeInput" readonly>
+        </div>
+
+        <div class="input-box">
+            <label>Artikel</label>
+            <input id="artikelInput" type="text">
+        </div>
+        <div class="input-box">
+            <label>MHD</label>
+            <input id="mhdInput" type="text">
+        </div>
+        <div class="input-box">
+            <label>數量</label>
+            <input id="qtyInput" type="number">
+        </div>
+    </div>
+    <div id="data-buttons">
+        <button id="submitBtn">送出資料</button>
+        <button id="clearBtn">清除資料</button>
+    </div>
 </div>
 
 <p id="status">等待開始</p>
 
 <canvas id="snapshot"></canvas>
-
+<div id="toast"></div>
 <div id="debug">
     Debug:
 </div>
