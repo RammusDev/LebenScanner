@@ -1,14 +1,12 @@
 export function cropROI(video, roiElement, canvas) {
-    const ctx = canvas.getContext("2d");
 
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
+    const ctx = canvas.getContext("2d");
 
     const videoRect = video.getBoundingClientRect();
     const roiRect = roiElement.getBoundingClientRect();
 
-    const scaleX = videoWidth / videoRect.width;
-    const scaleY = videoHeight / videoRect.height;
+    const scaleX = video.videoWidth / videoRect.width;
+    const scaleY = video.videoHeight / videoRect.height;
 
     const x = (roiRect.left - videoRect.left) * scaleX;
     const y = (roiRect.top - videoRect.top) * scaleY;
@@ -16,15 +14,18 @@ export function cropROI(video, roiElement, canvas) {
     const width = roiRect.width * scaleX;
     const height = roiRect.height * scaleY;
 
+
+    console.log("ROI position:", {
+        x,
+        y,
+        width,
+        height
+    });
+
+
     canvas.width = width;
     canvas.height = height;
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
 
     ctx.drawImage(
         video,
@@ -37,6 +38,7 @@ export function cropROI(video, roiElement, canvas) {
         width,
         height
     );
+
 
     return canvas;
 }

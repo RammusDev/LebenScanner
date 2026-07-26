@@ -12,6 +12,7 @@ startBtn.onclick = async () => {
     try {
         await startCamera();
         setStatus("相機已開啟");
+        console.log("Camera started");
     } catch (error) {
         console.error(error);
         setStatus("相機開啟失敗");
@@ -19,12 +20,22 @@ startBtn.onclick = async () => {
 };
 
 captureBtn.onclick = () => {
+    console.log("Capture button clicked");
+
     const video = getVideo();
+
+    console.log("Video size:", video.videoWidth, video.videoHeight);
 
     cropROI(
         video,
         roiElement,
         snapshot
+    );
+
+    console.log(
+        "Canvas size:",
+        snapshot.width,
+        snapshot.height
     );
 
     snapshot.style.display = "block";
