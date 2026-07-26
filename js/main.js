@@ -1,8 +1,10 @@
-import { startCamera, captureImage } from "./camera.js";
+import { startCamera, getVideo } from "./camera.js";
+import { cropROI } from "./roi.js";
 import { setStatus } from "./ui.js";
 
 const startBtn = document.getElementById("startBtn");
 const captureBtn = document.getElementById("captureBtn");
+const roiElement = document.getElementById("roi");
 
 startBtn.onclick = async () => {
     try {
@@ -15,9 +17,19 @@ startBtn.onclick = async () => {
 };
 
 captureBtn.onclick = () => {
-    const image = captureImage();
+    const video = getVideo();
 
-    console.log("Captured:", image);
+    const roiImage = cropROI(
+        video,
+        roiElement
+    );
 
-    setStatus("照片取得完成");
+    console.log(
+        "ROI Image:",
+        roiImage
+    );
+
+    setStatus("ROI裁切完成");
+
+    roiImage.style.display = "block";
 };
