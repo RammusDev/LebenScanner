@@ -15,6 +15,7 @@ import {debug,initDebug} from "./debug.js";
 import {decodeBarcode,validateBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
 import {initPaddle, detectText} from "./paddle.js";
+import {sendToGoogleSheet} from "./google.js";
 
 let currentBarcode = null;
 let paddleBusy=false;
@@ -112,6 +113,25 @@ DOM.clearBtn.onclick=()=>{
     debug("Clear","Clicked");
 };
 
-DOM.submitBtn.onclick=()=>{
-    debug("Submit","Clicked");
+DOM.submitBtn.onclick=async()=>{
+
+    const data={
+        time: new Date().toISOString(),
+        barcode: DOM.barcodeInput.value.trim(),
+        artikel: DOM.artikelInput.value.trim(),
+        mhd: DOM.mhdInput.value.trim(),
+        qty: DOM.qtyInput.value.trim()
+    };
+
+    debug("Submit Data",JSON.stringify(data));
+
+    const success =await sendToGoogleSheet(data,debug);
+
+    if(success){
+        showToast("資料已送出","success");
+    }
+    else{
+        showToast("送出失敗","error");
+    }
+
 };
