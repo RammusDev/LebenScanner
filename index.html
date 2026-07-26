@@ -11,7 +11,7 @@
 <body>
 
 <h1>MHD Scanner</h1>
-<div>Version V0.4 Debug</div>
+<div id="app-version"></div>
 
 <div id="camera-container">
     <video id="camera" autoplay playsinline></video>
@@ -30,7 +30,13 @@
 <div id="debug">
     Debug:
 </div>
+
+<script src="./js/config.js"></script>
 <script src="https://unpkg.com/@zxing/library@latest"></script>
+<script>
+    document.getElementById("app-version").innerHTML=
+    APP_CONFIG.name+" "+APP_CONFIG.version;
+</script>
 <script type="module" src="./js/main.js"></script>
 
 </body>

@@ -1,8 +1,10 @@
 import { startCamera, getVideo } from "./camera.js";
 import { cropROI } from "./roi.js";
 import { setStatus } from "./ui.js";
-import { debug } from "./debug.js";
+import { debug, initDebug } from "./debug.js";
 import { startBarcodeScanner } from "./barcode.js";
+
+initDebug();
 
 const startBtn = document.getElementById("startBtn");
 const captureBtn = document.getElementById("captureBtn");

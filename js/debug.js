@@ -1,19 +1,31 @@
-const debugData = {};
+const debugData={};
 
-export function debug(key, value) {
-    debugData[key] = value;
+export function initDebug(){
 
-    const box = document.getElementById("debug");
+    const box=document.getElementById("debug");
 
-    if (!box) {
+    if(box){
+        box.innerHTML=
+        `${APP_CONFIG.name} ${APP_CONFIG.version}<br><br>`;
+    }
+}
+
+export function debug(key,value){
+
+    debugData[key]=value;
+
+    const box=document.getElementById("debug");
+
+    if(!box){
         return;
     }
 
-    let html = "Debug<br><br>";
+    let html=
+    `${APP_CONFIG.name} ${APP_CONFIG.version}<br><br>`;
 
-    Object.keys(debugData).forEach(item => {
-        html += `${item}: ${debugData[item]}<br>`;
+    Object.keys(debugData).forEach(item=>{
+        html+=`${item}: ${debugData[item]}<br>`;
     });
 
-    box.innerHTML = html;
+    box.innerHTML=html;
 }
