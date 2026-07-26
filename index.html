@@ -2,70 +2,236 @@
 <html lang="zh-TW">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MHD Scanner</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
+
 </head>
 
-<body>
+<body class="bg-light">
 
-<h1>MHD Scanner</h1>
-<div id="app-version"></div>
+<div class="container py-3">
 
-<div id="camera-container">
-    <video id="camera" autoplay playsinline></video>
-    <div id="roi">將日期放入框內</div>
-</div>
+    <h2 class="text-center mb-0">
+        MHD Scanner
+    </h2>
 
-<div>
-    <button id="startBtn">開啟相機</button>
-    <button id="captureBtn" style="display:none;">掃描</button>
-</div>
+    <div id="app-version" class="text-center text-secondary mb-3"></div>
 
-<div id="data-panel">
-    <h2>資料</h2>
-    <div id="input-grid">
-        <div class="input-box">
-            <label>Barcode</label>
-            <input id="barcodeInput" readonly>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div id="camera-container" class="position-relative">
+
+                <video
+                    id="camera"
+                    class="w-100 rounded"
+                    autoplay
+                    playsinline>
+                </video>
+
+                <div id="roi">
+                    將日期放入框內
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="input-box">
-            <label>Artikel</label>
-            <input id="artikelInput" type="text">
-        </div>
-        <div class="input-box">
-            <label>MHD</label>
-            <input id="mhdInput" type="text">
-        </div>
-        <div class="input-box">
-            <label>數量</label>
-            <input id="qtyInput" type="number">
-        </div>
     </div>
-    <div id="data-buttons">
-        <button id="submitBtn">送出資料</button>
-        <button id="clearBtn">清除資料</button>
+
+
+    <div class="d-grid mt-3">
+
+        <button
+            id="startBtn"
+            class="btn btn-success btn-lg">
+            開啟相機
+        </button>
+
+        <button
+            id="captureBtn"
+            class="btn btn-primary btn-lg"
+            style="display:none;">
+            掃描
+        </button>
+
     </div>
+
+
+    <div
+        id="status"
+        class="alert alert-secondary mt-3 mb-3">
+
+        等待開始
+
+    </div>
+
+
+    <div class="card shadow-sm mb-3">
+
+        <div class="card-header fw-bold">
+
+            掃描資料
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-6">
+
+                    <label class="form-label">
+                        Barcode
+                    </label>
+
+                    <input
+                        id="barcodeInput"
+                        class="form-control"
+                        readonly>
+
+                </div>
+
+                <div class="col-6">
+
+                    <label class="form-label">
+                        Artikel
+                    </label>
+
+                    <input
+                        id="artikelInput"
+                        class="form-control">
+
+                </div>
+
+                <div class="col-6">
+
+                    <label class="form-label">
+                        MHD
+                    </label>
+
+                    <input
+                        id="mhdInput"
+                        class="form-control">
+
+                </div>
+
+                <div class="col-6">
+
+                    <label class="form-label">
+                        數量
+                    </label>
+
+                    <input
+                        id="qtyInput"
+                        type="number"
+                        class="form-control">
+
+                </div>
+
+            </div>
+
+            <div class="row mt-4">
+
+                <div class="col-6 d-grid">
+
+                    <button
+                        id="clearBtn"
+                        class="btn btn-outline-secondary">
+
+                        清除資料
+
+                    </button>
+
+                </div>
+
+                <div class="col-6 d-grid">
+
+                    <button
+                        id="submitBtn"
+                        class="btn btn-primary">
+
+                        送出資料
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <canvas
+        id="snapshot"
+        style="display:none;">
+    </canvas>
+
+
+    <div class="accordion">
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#debugCollapse">
+
+                    Debug
+
+                </button>
+
+            </h2>
+
+            <div
+                id="debugCollapse"
+                class="accordion-collapse collapse">
+
+                <div
+                    id="debug"
+                    class="accordion-body">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<p id="status">等待開始</p>
-
-<canvas id="snapshot"></canvas>
-<div id="toast"></div>
-<div id="debug">
-    Debug:
-</div>
 
 <script src="./js/config.js"></script>
+
 <script src="https://unpkg.com/@zxing/browser@latest"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/@paddlejs/paddlejs"></script> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@paddlejs/paddlejs"></script>
+
 <script>
-    document.getElementById("app-version").innerHTML=
-    APP_CONFIG.name+" "+APP_CONFIG.version;
+
+document.getElementById("app-version").textContent =
+    APP_CONFIG.name + " " + APP_CONFIG.version;
+
 </script>
+
 <script type="module" src="./js/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
