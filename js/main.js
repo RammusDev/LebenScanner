@@ -34,30 +34,31 @@ startBtn.onclick=async()=>{
 };
 
 captureBtn.onclick=()=>{
+    alert("1");
     const video=getVideo();
-
+    alert("2");
     debug("Capture","Clicked");
-
+    alert("3");
     debug(
         "Video",
         `${video.videoWidth} x ${video.videoHeight}`
     );
-
+    alert("4");
     cropROI(
         video,
         roiElement,
         snapshot,
         debug
     );
-
+ alert("5");
     snapshot.style.display="block";
 
     debug("ROI","Captured");
-
+ alert("6");
     startBarcodeScanner(
         video,
         debug
     );
-
+ alert("7");
     setStatus("ROI裁切完成");
 };
