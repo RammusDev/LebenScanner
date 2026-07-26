@@ -4,6 +4,9 @@ import {setStatus} from "./ui.js";
 import {debug,initDebug} from "./debug.js";
 import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
+import {decodeMHD} from "./ocr.js";
+
+let currentBarcode = null;
 
 initDebug();
 
@@ -34,7 +37,7 @@ startBtn.onclick=async()=>{
     }
 };
 
-captureBtn.onclick=()=>{
+captureBtn.onclick=async()=>{
   //  alert("1");
     const video=getVideo();
   //  alert("2");
@@ -53,14 +56,12 @@ captureBtn.onclick=()=>{
     );
  //alert("5");
     snapshot.style.display="block";
-
-    debug("ROI","Captured");
- //alert("6");
-    decodeBarcode(snapshot,debug);
-    // startBarcodeScanner(
-    //     video,
-    //     debug
-    // );
- //alert("7");
     setStatus("ROI裁切完成");
+    debug("ROI","Captured");
+
+ //alert("6");
+    currentBarcode = await(decodeBarcode(snapshot,debug));
+ //alert("7");
+    await decodeMHD(snapshot,debug);
+
 };
