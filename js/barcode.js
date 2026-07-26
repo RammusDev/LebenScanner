@@ -17,15 +17,7 @@ export async function decodeBarcode(canvas,debug){
             "Decode start"
         );
 
-        const image=new Image();
-
-        image.src=canvas.toDataURL();
-
-        await new Promise(resolve=>{
-            image.onload=resolve;
-        });
-
-        const result=await reader.decodeFromImageElement(image);
+        const result=await reader.decodeFromCanvas(canvas);
 
         const text=result.getText();
 
