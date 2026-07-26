@@ -1,4 +1,3 @@
-let paddleLoaded=false;
 let ocr=null;
 
 export async function initPaddle(debug){
@@ -10,15 +9,15 @@ export async function initPaddle(debug){
 
     try{
 
-        const module =
+        const module=
             await import(
                 "https://cdn.jsdelivr.net/npm/@paddleocr/paddleocr-js/+esm"
             );
 
-        window.PaddleOCR =
+
+        const PaddleOCR=
             module.PaddleOCR;
 
-        paddleLoaded=true;
 
         debug(
             "Paddle",
@@ -30,7 +29,7 @@ export async function initPaddle(debug){
             lang:"en",
             ocrVersion:"PP-OCRv5",
             ortOptions:{
-                backend:"wasm"
+                backend:"auto"
             }
         });
 
@@ -49,6 +48,7 @@ export async function initPaddle(debug){
         );
 
     }
+
 }
 
 
@@ -71,9 +71,11 @@ export async function detectText(canvas,debug){
     );
 
 
-    const result =await ocr.predict(canvas);
+    const result=
+        await ocr.predict(
+            canvas
+        );
 
-    //drawBoxes(canvas,result[0].items);
 
     debug(
         "Paddle",
@@ -81,43 +83,6 @@ export async function detectText(canvas,debug){
     );
 
 
-    debug(
-        "Paddle Result",
-        JSON.stringify(result)
-    );
-
-
     return result;
-}
-function drawBoxes(canvas,items){
 
-    const ctx=canvas.getContext("2d");
-
-    ctx.lineWidth=2;
-    ctx.strokeStyle="red";
-
-    items.forEach(item=>{
-
-        const p=item.poly;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            p[0][0],
-            p[0][1]
-        );
-
-        for(let i=1;i<p.length;i++){
-
-            ctx.lineTo(
-                p[i][0],
-                p[i][1]
-            );
-
-        }
-
-        ctx.closePath();
-        ctx.stroke();
-
-    });
 }
