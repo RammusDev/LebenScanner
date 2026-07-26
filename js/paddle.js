@@ -88,7 +88,6 @@ export function findDate(items,debug){
         if(!match){
             continue;
         }
-        let value=match[0];
          // 只修正日期候選區
         let value = match[0]
             .replace(/O/g,"0")
