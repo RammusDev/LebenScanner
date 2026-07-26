@@ -1,4 +1,5 @@
 let paddleLoaded=false;
+let ocr=null;
 
 export async function initPaddle(debug){
 
@@ -21,8 +22,24 @@ export async function initPaddle(debug){
 
         debug(
             "Paddle",
-            "Loaded"
+            "Library Loaded"
         );
+
+
+        ocr=await PaddleOCR.create({
+            lang:"en",
+            ocrVersion:"PP-OCRv5",
+            ortOptions:{
+                backend:"auto"
+            }
+        });
+
+
+        debug(
+            "Paddle",
+            "Model Ready"
+        );
+
 
         return true;
 
