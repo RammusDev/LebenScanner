@@ -97,18 +97,22 @@ function normalizeDate(text){
         .replace(/I/g,"1")
         .replace(/l/g,"1")
         .replace(/[^\d]/g,"");
-    let day;
-    let month;
-    let year;
-    // DDMMYYYY
-    if(value.length===8){
 
-        day=value.substring(0,2);
-        month=value.substring(2,4);
-        year=value.substring(4,8);
-
+    if(!/^\d{8}$/.test(value)){
+        return null;
     }
-    else{       
+
+    let day=value.slice(0,2);
+    let month=value.slice(2,4);
+    let year=value.slice(4,8);
+
+    let d=parseInt(day);
+    let m=parseInt(month);
+    let y=parseInt(year);
+
+    // 日期合理性
+    if(d<1 ||d>31 ||m<1 ||m>12)
+    {
         return null;
     }
     year=parseInt(year);
@@ -119,5 +123,5 @@ function normalizeDate(text){
     ){
         year=2026;
     }
-    return (day.padStart(2,"0")+"."+month.padStart(2,"0")+"."+year);
+    return (String(d).padStart(2,"0")+"."+String(m).padStart(2,"0")+"."+y);
 }
