@@ -40,10 +40,7 @@ export async function detectText(canvas,debug){
     try{
         const result = await ocr.predict(canvas);
 
-        debug(
-            "Paddle",
-            "Predict Done"
-        );
+        debug("Paddle","Predict Done");
 
         if(result && result[0] && result[0].items)
         {
@@ -53,7 +50,7 @@ export async function detectText(canvas,debug){
 
                 const date = findDate(items,debug);
                 if(date){
-                    debug("Result",normalizeDate(date));
+                    debug("Result",date);
                 }
                 else{
                     debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
@@ -76,52 +73,46 @@ export function findDate(items,debug){
     ];
     for(const item of items){
         const text=item.text;
-        for(const regex of dateRegex){
-            const match=text.match(regex);
-            if(match){
-                debug("Date Candidate",match[0]);
-                return match[0];
-            }
-        }
-    }
-
-    debug("Date Candidate","Not Found");
-
-    return null;
-}
-
-function normalizeDate(text){
-
-    let value=text
+        let value=text
         .replace(/O/g,"0")
         .replace(/I/g,"1")
         .replace(/l/g,"1")
         .replace(/[^\d]/g,"");
 
-    if(!/^\d{8}$/.test(value)){
-        return null;
+        if(!/^\d{8}$/.test(value)){
+            continue;
+        }
+        
+        let day=value.slice(0,2);
+        let month=value.slice(2,4);
+        let year=value.slice(4,8);
+
+        let d=parseInt(day);
+        let m=parseInt(month);
+        let y=parseInt(year);
+
+        // 日期合理性
+        if(d<1 ||d>31 ||m<1 ||m>12)
+        {
+            continue;
+        }
+        // OCR 常見年份錯誤
+        if(y>2030 &&y<2100
+        ){
+            y=2026;
+        }
+        const result = String(d).padStart(2,"0")+"."+String(m).padStart(2,"0")+"."+y;
+        return result;
+        // for(const regex of dateRegex){
+        //     const match=text.match(regex);
+        //     if(match){
+        //         debug("Date Candidate",match[0]);
+        //         return match[0];
+        //     }
+        // }
     }
 
-    let day=value.slice(0,2);
-    let month=value.slice(2,4);
-    let year=value.slice(4,8);
+    //debug("Date Candidate","Not Found");
 
-    let d=parseInt(day);
-    let m=parseInt(month);
-    let y=parseInt(year);
-
-    // 日期合理性
-    if(d<1 ||d>31 ||m<1 ||m>12)
-    {
-        return null;
-    }
-    year=parseInt(year);
-    // OCR 常見年份錯誤
-    if(
-        year>2030 &&
-        year<2100
-    ){
-        year=2026;
-    }
-    return (String(d).padStart(2,"0")+"."+String(m).padStart(2,"0")+"."+y);
+    return null;
 }
