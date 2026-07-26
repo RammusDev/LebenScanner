@@ -17,17 +17,16 @@ export async function decodeBarcode(canvas,debug){
             "Decode start"
         );
 
-        //const result=await reader.decodeFromCanvas(canvas);
         const image=new Image();
 
         image.src=canvas.toDataURL();
 
         await new Promise(resolve=>{
-        image.onload=resolve;
+            image.onload=resolve;
         });
 
         const result=await reader.decodeFromImageElement(image);
-        
+
         const text=result.getText();
 
         debug(
