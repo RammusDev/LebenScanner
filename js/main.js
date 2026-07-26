@@ -16,23 +16,13 @@ import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
 import {initPaddle, detectText} from "./paddle.js";
 
-
 let currentBarcode = null;
 let paddleBusy=false;
 
-
 initDebug();
-
 initPaddle(debug);
 
-
-
-debug(
-"Elements",
-`start:${!!DOM.startBtn} capture:${!!DOM.captureBtn} roi:${!!DOM.roi} canvas:${!!DOM.snapshot}`
-);
-
-
+debug("Elements",`start:${!!DOM.startBtn} capture:${!!DOM.captureBtn} roi:${!!DOM.roi} canvas:${!!DOM.snapshot}`);
 
 DOM.startBtn.onclick=async()=>{
 
@@ -40,84 +30,38 @@ DOM.startBtn.onclick=async()=>{
 
         await startCamera();
 
-
-        setStatus(
-            "相機已開啟",
-            "success"
-        );
-
+        setStatus("相機已開啟","success");
 
         DOM.startBtn.style.display="none";
-
         DOM.captureBtn.style.display="block";
-
-
 
         const video=getVideo();
 
+        debug("Camera","Started");
 
-        debug(
-            "Camera",
-            "Started"
-        );
-
-
-        debug(
-            "Video",
-            `${video.videoWidth} x ${video.videoHeight}`
-        );
-
+        debug("Video",`${video.videoWidth} x ${video.videoHeight}`);
 
     }
     catch(error){
 
-        debug(
-            "Camera Error",
-            error.message
-        );
-
-
-        setStatus(
-            "相機開啟失敗",
-            "danger"
-        );
-
+        debug("Camera Error",error.message);
+        setStatus("相機開啟失敗","danger");
     }
 
 };
 
-
-
-
-
 DOM.captureBtn.onclick=async()=>{
-
 
     if(paddleBusy){
 
-        debug(
-            "Paddle Busy",
-            "Skip"
-        );
-
+        debug("Paddle Busy","Skip");
         return;
-
     }
-
-
     paddleBusy=true;
-
-
-    setLoading(true);
-
-
+    //setLoading(true);
 
     try{
-
-
         const video=getVideo();
-
-
 
         cropROI(
             video,
@@ -126,14 +70,9 @@ DOM.captureBtn.onclick=async()=>{
             debug
         );
 
+        DOM.snapshot.style.display="block";
 
-
-        setStatus(
-            "ROI裁切完成",
-            "info"
-        );
-
-
+        setStatus("ROI裁切完成","info");
 
         const result =
             await detectText(
@@ -141,33 +80,15 @@ DOM.captureBtn.onclick=async()=>{
                 debug
             );
 
-
-
         if(result){
 
             fillMHD(result);
-
-
-            showToast(
-                "MHD: "+result,
-                "success"
-            );
-
-
+            showToast("MHD: "+result,"success");
             focusArtikel();
-
-
         }
         else{
-
-            showToast(
-                "MHD Not Found",
-                "error"
-            );
-
+            showToast("MHD Not Found","error");
         }
-
-
 
         currentBarcode =
             await decodeBarcode(
@@ -175,71 +96,24 @@ DOM.captureBtn.onclick=async()=>{
                 debug
             );
 
-
-
         if(currentBarcode){
-
-            fillBarcode(
-                currentBarcode
-            );
-
+            fillBarcode(currentBarcode);
         }
-
-
 
     }
     finally{
-
-
         paddleBusy=false;
-
-
-        setLoading(false);
-
-
-        debug(
-            "Paddle Busy",
-            "False"
-        );
-
+        //setLoading(false);
+        debug("Paddle Busy","False");
     }
-
-
 };
-
-
-
-
 
 DOM.clearBtn.onclick=()=>{
-
-
     clearForm();
-
-
-    showToast(
-        "資料已清除",
-        "success"
-    );
-
-
-    debug(
-        "Clear",
-        "Clicked"
-    );
-
+    showToast("資料已清除","success");
+    debug("Clear","Clicked");
 };
 
-
-
-
-
 DOM.submitBtn.onclick=()=>{
-
-
-    debug(
-        "Submit",
-        "Clicked"
-    );
-
+    debug("Submit","Clicked");
 };
