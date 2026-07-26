@@ -1,74 +1,40 @@
-let codeReader=null;
-let scanning=false;
-let timer=null;
-
-export function startBarcodeScanner(video,debug){
+export async function decodeBarcode(canvas,debug){
 
     if(!window.ZXing){
-        debug("Barcode","ZXing not loaded");
-        return;
+        debug(
+            "Barcode",
+            "ZXing not loaded"
+        );
+        return null;
     }
 
-    if(scanning)return;
+    try{
 
-    scanning=true;
+        const codeReader=new ZXing.BrowserMultiFormatReader();
 
-    codeReader=new ZXing.BrowserMultiFormatReader();
-
-    const canvas=document.createElement("canvas");
-    const ctx=canvas.getContext("2d");
-
-    debug("Barcode","Scanner Ready");
-
-    function scan(){
-
-        if(!scanning)return;
-
-        if(video.videoWidth===0){
-            timer=requestAnimationFrame(scan);
-            return;
-        }
-
-        canvas.width=video.videoWidth;
-        canvas.height=video.videoHeight;
-
-        ctx.drawImage(
-            video,
-            0,
-            0,
-            canvas.width,
-            canvas.height
+        debug(
+            "Barcode",
+            "Decode start"
         );
 
-        codeReader.decodeFromCanvas(canvas)
-        .then(result=>{
+        const result=await codeReader.decodeFromCanvas(canvas);
 
-            debug(
-                "Barcode",
-                result.getText()
-            );
+        const text=result.getText();
 
-            stopBarcodeScanner();
+        debug(
+            "Barcode",
+            text
+        );
 
-        })
-        .catch(()=>{
+        return text;
 
-            timer=requestAnimationFrame(scan);
+    }catch(error){
 
-        });
+        debug(
+            "Barcode",
+            "No result"
+        );
+
+        return null;
     }
-
-    scan();
-}
-
-export function stopBarcodeScanner(){
-
-    scanning=false;
-
-    if(timer){
-        cancelAnimationFrame(timer);
-        timer=null;
-    }
-
-    codeReader=null;
 }

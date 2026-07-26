@@ -2,7 +2,7 @@ import {startCamera,getVideo} from "./camera.js";
 import {cropROI} from "./roi.js";
 import {setStatus} from "./ui.js";
 import {debug,initDebug} from "./debug.js";
-//import {startBarcodeScanner} from "./barcode.js";
+import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
 
 initDebug();
@@ -56,6 +56,7 @@ captureBtn.onclick=()=>{
 
     debug("ROI","Captured");
  //alert("6");
+    decodeBarcode(snapshot,debug);
     // startBarcodeScanner(
     //     video,
     //     debug
