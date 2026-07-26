@@ -61,6 +61,7 @@ export async function detectText(canvas,debug){
                 const date = findDate(items,debug);
                 if(date){
                     debug("Result",date);
+                    alert("Find MHD:"+ date );
                 }
                 else{
                     debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
@@ -83,7 +84,18 @@ export function findDate(items,debug){
     ];
     for(const item of items){
         const text=item.text;
-        let value=text.replace(/[^\d]/g,"");
+        const match=text.match(/[0-9OIlZ./-]{6,}/);
+        if(!match){
+            continue;
+        }
+        let value=match[0];
+         // 只修正日期候選區
+        let value = match[0]
+            .replace(/O/g,"0")
+            .replace(/I/g,"1")
+            .replace(/l/g,"1")
+            .replace(/Z/g,"2")
+            .replace(/[^\d]/g,"");
 
         if(!/^\d{8}$/.test(value)){
             continue;

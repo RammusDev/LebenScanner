@@ -4,9 +4,8 @@ import {setStatus} from "./ui.js";
 import {debug,initDebug} from "./debug.js";
 import {decodeBarcode} from "./barcode.js";
 import {DOM} from "./dom.js";
-//import {decodeMHD} from "./ocr.js";
-import {initPaddle} from "./paddle.js";
-import { detectText } from "./paddle.js";
+import {initPaddle, detectText } from "./paddle.js";
+
 let currentBarcode = null;
 let paddleBusy=false;
 
@@ -73,6 +72,6 @@ captureBtn.onclick=async()=>{
     );
     paddleBusy=false;
     debug("Paddle Busy","False");
-    
+
     currentBarcode = await(decodeBarcode(snapshot,debug));
 };
