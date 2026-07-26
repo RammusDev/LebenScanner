@@ -14,34 +14,40 @@ startBtn.onclick = async () => {
         await startCamera();
 
         setStatus("相機已開啟");
-        debug("Camera started");
 
         const video = getVideo();
 
+        debug("Camera", "Started");
+
         debug(
-            "Video: " +
-            video.videoWidth +
-            " x " +
-            video.videoHeight
+            "Video",
+            `${video.videoWidth} x ${video.videoHeight}`
         );
 
     } catch (error) {
-        debug("Camera error");
-        debug(error.message);
+        console.error(error);
+
+        setStatus("相機開啟失敗");
+
+        debug(
+            "Camera Error",
+            error.message
+        );
     }
 };
 
 captureBtn.onclick = () => {
 
-    debug("Capture clicked");
-
     const video = getVideo();
 
     debug(
-        "Video size: " +
-        video.videoWidth +
-        " x " +
-        video.videoHeight
+        "Capture",
+        "Clicked"
+    );
+
+    debug(
+        "Video",
+        `${video.videoWidth} x ${video.videoHeight}`
     );
 
     cropROI(

@@ -15,22 +15,21 @@ export function cropROI(video, roiElement, canvas, debug) {
     const height = roiRect.height * scaleY;
 
     debug(
-        "ROI: " +
-        Math.round(x) +
-        "," +
-        Math.round(y) +
-        " " +
-        Math.round(width) +
-        "x" +
-        Math.round(height)
+        "ROI",
+        `${Math.round(x)},${Math.round(y)} ${Math.round(width)} x ${Math.round(height)}`
     );
 
     canvas.width = width;
     canvas.height = height;
 
-    const ctx2 = canvas.getContext("2d");
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-    ctx2.drawImage(
+    ctx.drawImage(
         video,
         x,
         y,
@@ -43,9 +42,7 @@ export function cropROI(video, roiElement, canvas, debug) {
     );
 
     debug(
-        "Canvas: " +
-        canvas.width +
-        " x " +
-        canvas.height
+        "Canvas",
+        `${canvas.width} x ${canvas.height}`
     );
 }
