@@ -38,9 +38,9 @@ export async function decodeMHD(canvas,debug){
         //     gray > 160 ? 255 : 0;
 
 
-        data[i]=value;
-        data[i+1]=value;
-        data[i+2]=value;
+        data[i]=gray;
+        data[i+1]=gray;
+        data[i+2]=gray;
     }
 
     ctx.putImageData(
