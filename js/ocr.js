@@ -1,6 +1,7 @@
 export async function decodeMHD(canvas,debug){
 
     debug("OCR","Start");
+
     const scale=4;
     const processCanvas=document.createElement("canvas");
 
@@ -33,11 +34,6 @@ export async function decodeMHD(canvas,debug){
             data[i+1]*0.587+
             data[i+2]*0.114;
 
-
-        // const value =
-        //     gray > 160 ? 255 : 0;
-
-
         data[i]=gray;
         data[i+1]=gray;
         data[i+2]=gray;
@@ -54,15 +50,49 @@ export async function decodeMHD(canvas,debug){
         `${processCanvas.width} x ${processCanvas.height}`
     );
 
+
     const result=await Tesseract.recognize(
         processCanvas,
         "eng"
     );
 
+
     debug(
         "OCR Text",
         result.data.text
     );
+
+    debug(
+        "OCR Confidence",
+        result.data.confidence
+    );
+
+
+    if(result.data.words){
+
+        debug(
+            "Word Count",
+            result.data.words.length
+        );
+
+        result.data.words.forEach((word,index)=>{
+
+            debug(
+                "Word "+index,
+                `${word.text} ${word.confidence.toFixed(1)}`
+            );
+
+            if(word.bbox){
+
+                debug(
+                    "BBox "+index,
+                    `${word.bbox.x0},${word.bbox.y0}-${word.bbox.x1},${word.bbox.y1}`
+                );
+
+            }
+
+        });
+    }
 
     return result.data.text;
 }
