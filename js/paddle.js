@@ -41,8 +41,6 @@ export async function initPaddle(debug){
         );
 
 
-        return true;
-
     }catch(error){
 
         debug(
@@ -50,6 +48,46 @@ export async function initPaddle(debug){
             error.message
         );
 
-        return false;
     }
+}
+
+
+export async function detectText(canvas,debug){
+
+    if(!ocr){
+
+        debug(
+            "Paddle",
+            "Not Ready"
+        );
+
+        return null;
+    }
+
+
+    debug(
+        "Paddle",
+        "Predict Start"
+    );
+
+
+    const result =
+        await ocr.predict(
+            canvas
+        );
+
+
+    debug(
+        "Paddle",
+        "Predict Done"
+    );
+
+
+    debug(
+        "Paddle Result",
+        JSON.stringify(result)
+    );
+
+
+    return result;
 }
