@@ -34,8 +34,8 @@ export async function decodeMHD(canvas,debug){
             data[i+2]*0.114;
 
 
-        const value =
-            gray > 160 ? 255 : 0;
+        // const value =
+        //     gray > 160 ? 255 : 0;
 
 
         data[i]=value;
