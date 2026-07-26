@@ -1,9 +1,6 @@
 export async function decodeMHD(canvas,debug){
 
-    debug(
-        "OCR",
-        "Start"
-    );
+    debug("OCR",typeof Tesseract);
 
     return null;
 }
