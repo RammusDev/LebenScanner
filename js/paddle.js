@@ -27,16 +27,16 @@ export async function initPaddle(debug){
     }
 
 }
-export function downscaleCanvas(sourceCanvas, maxSize = 960) {
-    const scale = Math.min(maxSize / sourceCanvas.width, maxSize / sourceCanvas.height, 1);
-    if (scale === 1) return sourceCanvas;
+// export function downscaleCanvas(sourceCanvas, maxSize = 960) {
+//     const scale = Math.min(maxSize / sourceCanvas.width, maxSize / sourceCanvas.height, 1);
+//     if (scale === 1) return sourceCanvas;
     
-    const small = document.createElement("canvas");
-    small.width = sourceCanvas.width * scale;
-    small.height = sourceCanvas.height * scale;
-    small.getContext("2d").drawImage(sourceCanvas, 0, 0, small.width, small.height);
-    return small;
-}
+//     const small = document.createElement("canvas");
+//     small.width = sourceCanvas.width * scale;
+//     small.height = sourceCanvas.height * scale;
+//     small.getContext("2d").drawImage(sourceCanvas, 0, 0, small.width, small.height);
+//     return small;
+// }
 
 export async function detectText(canvas,debug){
 
@@ -48,7 +48,8 @@ export async function detectText(canvas,debug){
     debug("Paddle","Predict Start");
 
     try{
-        const result = await ocr.predict(downscaleCanvas(canvas));
+        const result = await ocr.predict(canvas);
+        //const result = await ocr.predict(downscaleCanvas(canvas));
 
         debug("Paddle","Predict Done");
 
@@ -56,17 +57,16 @@ export async function detectText(canvas,debug){
         {
             const items=result[0].items;
             debug("Paddle Boxes",items.length);
-            items.forEach((item,index)=>{
 
-                const date = findDate(items,debug);
-                if(date){
-                    debug("Result",date);
-                    return date;
-                    //alert("Find MHD:"+ date );
-                }
-                else{
-                    debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
-                }
+            
+            const date = findDate(items,debug);
+            if(date){
+                debug("Result",date);
+                return date;
+                //alert("Find MHD:"+ date );
+            }
+            items.forEach((item,index)=>{
+                debug("Paddle "+index,`${item.text} (${item.score.toFixed(2)})`);
             });
         }
         // No found is fail
