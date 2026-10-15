@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="手機掃描商品條碼與效期，將日常庫存登錄變得簡單。"
+    />
+    <title>LebenScanner · 商品效期助手</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="./">L<span>▥</span> LebenScanner</a
+      ><span class="tag">BROWSER INVENTORY TOOL</span>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">LESS TYPING. MORE LIVING.</p>
+        <h1>掃一下，<br />留住每一份新鮮<span>。</span></h1>
+        <p>用手機掃描條碼與有效日期，<br />把商品登錄變成幾個簡單步驟。</p>
+      </section>
+      <div class="mode">
+        <label><input id="demoMode" type="checkbox" checked /> 示範模式</label
+        ><span id="modeHint">無需相機或帳號；資料只保存在此頁面記憶體。</span>
+      </div>
+      <div class="workspace">
+        <section class="panel">
+          <div class="panel-title">
+            <h2>01 / 掃描商品</h2>
+            <span id="ocrStatus" class="tag">示範就緒</span>
+          </div>
+          <div id="camera-container">
+            <video id="camera" autoplay playsinline muted></video>
+            <div id="cameraPlaceholder">
+              <span class="scan-icon">▥</span><strong>從一件商品開始</strong>
+              <p>試用範例，或切換至實機掃描</p>
+            </div>
+            <div id="roi">將條碼或日期放入框內</div>
+          </div>
+          <div class="actions">
+            <button id="startBtn">開啟相機</button
+            ><button id="captureBtn" hidden>掃描</button
+            ><button id="demoBtn" class="secondary">載入示範商品</button>
+          </div>
+          <p class="help">先掃條碼，再掃效期。辨識結果可手動修正。</p>
+          <canvas id="snapshot" hidden></canvas>
+        </section>
+        <section class="panel">
+          <div class="panel-title">
+            <h2>02 / 確認與儲存</h2>
+            <span class="tag">人工核對</span>
+          </div>
+          <form id="entryForm">
+            <label for="barcodeInput">商品條碼</label
+            ><input
+              id="barcodeInput"
+              inputmode="numeric"
+              placeholder="掃描或輸入 8–14 位條碼"
+            /><label for="artikelInput">商品名稱 · Artikel</label
+            ><input id="artikelInput" placeholder="例如：Bio Haferdrink" />
+            <div class="fields">
+              <div>
+                <label for="mhdInput">有效日期 · MHD</label
+                ><input id="mhdInput" placeholder="DD.MM.YYYY" required />
+              </div>
+              <div>
+                <label for="qtyInput">數量</label
+                ><input
+                  id="qtyInput"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value="1"
+                  required
+                />
+              </div>
+            </div>
+            <div class="actions">
+              <button id="submitBtn" type="submit">儲存示範紀錄</button
+              ><button id="clearBtn" class="secondary" type="button">
+                清除
+              </button>
+            </div>
+          </form>
+          <div id="status" role="status" aria-live="polite">
+            準備好了。載入示範商品，即可體驗登錄流程。
+          </div>
+        </section>
+      </div>
+      <section class="panel records">
+        <div class="panel-title">
+          <h2>本次登錄 <span id="recordCount">0</span></h2>
+          <button id="exportBtn" class="secondary" disabled>匯出 JSON</button>
+        </div>
+        <p id="emptyRecords" class="help">
+          尚無紀錄。示範資料不會傳送至 Google Sheets，重新整理即清除。
+        </p>
+        <ul id="records"></ul>
+      </section>
+      <details>
+        <summary>技術與辨識診斷</summary>
+        <p>
+          原生 JavaScript · ZXing · PaddleOCR · ROI 影像裁切。OCR
+          僅提供候選日期，請核對商品包裝。
+        </p>
+        <pre id="debug"></pre>
+      </details>
+    </main>
+    <footer>
+      Built for everyday inventory.
+      <a href="https://github.com/RammusDev/LebenScanner">查看原始碼 ↗</a>
+    </footer>
+    <div id="toast" role="status"></div>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
