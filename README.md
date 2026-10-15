@@ -1,83 +1,54 @@
 # LebenScanner
 
-以手機相機掃描商品條碼與有效日期（MHD / Mindesthaltbarkeitsdatum），並將商品資料送至 Google Sheets 的瀏覽器工具。
+手機商品登錄工具：掃描條碼與有效日期，核對後儲存或匯出。
 
-目前版本：`V0.8.1`（見 `js/config.js`）。
+![桌面展示](docs/desktop.png)
 
-## 功能
+## 30 秒體驗
 
-- 使用裝置相機，優先選擇後鏡頭。
-- 裁切畫面中的辨識區域（ROI）。
-- 使用 ZXing 辨識條碼。
-- 使用 PaddleOCR 辨識有效日期。
-- 手動補充或修正 Artikel、MHD 與數量。
-- 透過 Google Apps Script 傳送資料至 Google Sheets。
-- 提供 Debug 面板查看模型載入及辨識訊息。
-
-## 使用方式
-
-1. 開啟頁面，允許相機權限，按「開啟相機」。
-2. 將條碼放入框內並按「掃描」；條碼欄位為空且未填 Artikel 時，會先辨識條碼。
-3. 已有條碼或 Artikel 後，將有效日期放入框內，再按「掃描」辨識 MHD。
-4. 檢查並修正商品名稱、日期與數量。
-5. 按「送出資料」，並在目標試算表確認資料是否寫入。
-6. 按「清除資料」開始下一筆。
-
-OCR 初始化完成後才能辨識日期，可在 Debug 面板查看 `Model Ready`。
-
-## 本機執行
-
-這是原生 HTML、CSS 與 JavaScript 專案，沒有建置步驟。安裝 Python 3 後，在專案根目錄執行：
+需要 Node.js 22 以上，不需要安裝依賴。
 
 ```sh
-python -m http.server 8000
+npm start
 ```
 
-開啟 `http://localhost:8000`。相機需要瀏覽器允許的安全來源；手機連線至電腦的普通 HTTP 區網網址通常不符合要求，手機測試請使用 HTTPS 部署。
+開啟 http://localhost:8000 →「載入示範商品」→「儲存示範紀錄」→「匯出 JSON」。預設示範模式不啟動相機、不載入 OCR 模型，也不傳送資料。紀錄只存在本次頁面記憶體，重新整理即清除。
 
-外部函式庫與 OCR 模型需經網路載入。
+## 解決的問題
 
-## Google Sheets 設定
+商品登錄常要反覆輸入條碼、效期及數量。本專案把相機擷取、辨識、人工核對及登錄串成同一個瀏覽器流程，保留手動輸入作為辨識失敗時的替代方式。
 
-在 `js/google.js` 將 `GOOGLE_SCRIPT_URL` 改為自己的 Google Apps Script Web App 網址。
+## 技術與設計
 
-接收端需處理 POST JSON，欄位如下：
+- 原生 JavaScript ES modules，沒有建置程序。
+- ZXing Browser 0.1.5 辨識商品條碼；PaddleOCR.js 0.4.2 辨識日期候選。
+- ROI 裁切縮小辨識範圍；OCR 僅在實機模式開啟相機時載入。
+- 支援 DD.MM.YYYY、YYYY-MM-DD 及八位數日月年；以完整曆法檢查閏年及月份天數。四位數年份原樣保留，不猜測或覆寫。
+- 真實提交必須收到接收端 `{ok:true}` 才能顯示成功。
+- DOM 文字輸出避免把商品名稱或診斷文字解讀成 HTML。
 
-| 欄位 | 內容 |
-| --- | --- |
-| time | ISO 格式提交時間 |
-| barcode | 條碼字串 |
-| artikel | 商品名稱或編號 |
-| mhd | 有效日期字串 |
-| qty | 數量字串 |
+## 相機與雲端設定
 
-Google Apps Script 接收端程式不包含在此 repo，需要另行建立及部署。單純複製此 repo 不會建立試算表或接收端。
+1. 關閉示範模式，允許相機權限。手機部署需要 HTTPS，本機可用 localhost。
+2. 先掃條碼，再掃效期。也可以手動輸入；條碼接受 8、12、13、14 位數字，這是格式檢查，未驗證 GTIN 檢查碼。
+3. Google Apps Script 接收程式在 [apps-script/Code.gs](apps-script/Code.gs)。設定 Script property `SPREADSHEET_ID`，目標工作表第一列可設為 time、barcode、artikel、mhd、qty。
+4. 部署為 Web App，以自己身分執行，將可存取的 /exec URL 填入 `js/google.js` 的 `SUBMIT_URL`。公開部署會允許持有網址者寫入，展示請使用專用試算表。
+5. 接收端完成 appendRow 及 flush 後才回傳 `{ok:true}`。前端以 text/plain JSON 避免不必要的預檢，仍要求瀏覽器能讀取回應；若存取政策、重新導向或 CORS 阻擋，介面會顯示失敗而不宣稱寫入成功。
 
-## 程式結構
+提交逾時可能發生在實際寫入後。重試前請查看試算表，以免重複登錄。目前未實作冪等提交。
 
-| 檔案 | 職責 |
-| --- | --- |
-| index.html / style.css | 操作畫面與樣式 |
-| js/main.js | 掃描與提交流程 |
-| js/camera.js | 相機存取 |
-| js/roi.js / js/canvas.js | 影像裁切與處理 |
-| js/barcode.js | 條碼辨識 |
-| js/paddle.js | OCR 初始化與日期擷取 |
-| js/google.js | 傳送至 Apps Script |
-| js/ui.js / js/dom.js | 畫面操作 |
-| js/debug.js | Debug 訊息 |
-| js/config.js | 顯示名稱與版本 |
+## 驗證
 
-## 目前限制
+```sh
+npm test
+```
 
-- 日期擷取目前以八位數的日、月、年解析；僅檢查日與月的範圍，未完整驗證曆法日期。
-- 程式會將部分 OCR 誤辨識的年份（2031–2099）改為 2026，送出前需人工核對。
-- Google Sheets 提交使用 `no-cors`，前端無法讀取接收端的回應；「送出」提示不能證明試算表寫入成功。
-- 相機、OCR 與試算表寫入的實際可用性需在目標裝置及部署環境驗證。
+測試涵蓋曆法日期、OCR 候選、年份保留及接收端確認。另以桌面與 390px 手機瀏覽器驗證示範登錄、無效日期、JSON 匯出按鈕狀態及未設定雲端服務的失敗提示。GitHub Actions 會執行單元測試。
 
-## 後續整理方向
+相機實物掃描、模型下載及 Google Sheets 正式寫入仍需於目標手機與自己的部署環境驗證。本次沒有把外部服務或模擬測試當成實機成功紀錄。
 
-- 補充實機操作截圖。
-- 改善日期驗證及年份修正規則。
-- 加入可確認寫入結果的提交機制。
-- 固定外部依賴版本，改善重現性。
+## 作品集介紹
+
+> 設計並實作瀏覽器商品登錄工具，整合相機 ROI 裁切、條碼辨識與 OCR 日期擷取，加入完整日期驗證、人工核對及可確認結果的提交介面，並提供免帳號示範模式與 JSON 匯出。
+
+[手機版畫面](docs/mobile.png)
